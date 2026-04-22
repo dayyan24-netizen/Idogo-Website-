@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About IDOGO — Learn about the project, the team, and the values guiding this research on language, education, and colonial legacy." />
+  <title>About IDOGO — Language, Education, and Colonial Legacy</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── About-page-specific styles ── */
+
+    .project-overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .overview-image {
+      border-radius: var(--radius-lg);
+      background-color: var(--border);
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .overview-text p {
+      margin-bottom: 16px;
+    }
+
+    .why-matters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .why-card {
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+    }
+
+    .why-card-number {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--border);
+      display: block;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .why-card h4 {
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
+    .why-card p {
+      font-size: 0.93rem;
+      max-width: 100%;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 28px;
+    }
+
+    .bio-card-lead {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: start;
+      grid-column: 1 / -1;
+      transition: box-shadow 0.2s;
+    }
+
+    .bio-card-lead:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .bio-card-lead .bio-avatar {
+      width: 110px;
+      height: 110px;
+      margin: 0;
+      font-size: 2.6rem;
+    }
+
+    .bio-card-lead .bio-role {
+      margin-bottom: 10px;
+    }
+
+    .bio-card-lead h3 {
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+    }
+
+    .bio-card-lead p {
+      max-width: 100%;
+      text-align: left;
+      margin-bottom: 14px;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .value-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .value-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .value-icon {
+      font-size: 1.6rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .value-card h4 {
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .value-card p {
+      font-size: 0.9rem;
+      max-width: 100%;
+    }
+
+    .principles-wrap {
+      background-color: var(--heading);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .principles-text h2 {
+      color: var(--surface);
+      margin-bottom: 14px;
+    }
+
+    .principles-text p {
+      color: var(--border);
+    }
+
+    .principles-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .principle-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .principle-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+
+    .principle-item p {
+      color: var(--border);
+      font-size: 0.97rem;
+      max-width: 100%;
+    }
+
+    @media (max-width: 800px) {
+      .project-overview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bio-card-lead {
+        grid-template-columns: 1fr;
+      }
+
+      .bio-card-lead .bio-avatar {
+        margin: 0 auto;
+      }
+
+      .principles-wrap {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       FLOATING BANNER
+  ══════════════════════════════════════════════════════ -->
+  <div id="floating-banner" class="floating-banner" style="display:none;">
+    &#127775; New research conversation added &mdash;
+    <a href="library.html">Watch the latest video</a>
+    <button id="banner-close" class="banner-close" aria-label="Dismiss banner">&times;</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════════════════════════ -->
+  <nav class="site-nav" id="site-nav">
+    <div class="container">
+      <div class="nav-inner">
+
+        <a href="index.html" class="nav-logo">
+          <div class="logo-placeholder">Logo</div>
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">IDOGO</span>
+            <span class="nav-brand-sub">Language &amp; Colonial Legacy</span>
+          </div>
+        </a>
+
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="themes.html">Themes</a></li>
+          <li><a href="library.html">Library</a></li>
+          <li><a href="community.html">Community</a></li>
+        </ul>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+      </div>
+
+      <ul class="nav-mobile" id="nav-mobile">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="themes.html">Themes</a></li>
+        <li><a href="library.html">Library</a></li>
+        <li><a href="community.html">Community</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       PAGE HERO
+  ══════════════════════════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="section-label">About the Project</span>
+      <h1>About IDOGO</h1>
+      <p>A research project led by Professor Odugu exploring language, colonialism, education, and student development &mdash; bringing together scholars, students, and community voices.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       PROJECT OVERVIEW
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="project-overview-grid">
+
+        <div class="overview-image">
+          Project image &mdash; to be added
+        </div>
+
+        <div class="overview-text">
+          <span class="section-label">Project Overview</span>
+          <h2>What Is IDOGO?</h2>
+          <p>IDOGO is a research project focused on the intersections of language, colonial education, institutional power, and student development. It operates as a public-facing research hub and clearing house where scholars, students, and community members can explore ideas together.</p>
+          <p>The project uses language as its entry point into a much larger conversation &mdash; one about whose knowledge counts, how colonial systems continue to shape modern classrooms, and what it means to truly belong in an educational space.</p>
+          <p>IDOGO is built on the belief that experts have much to learn from non-experts, and that research becomes richer when it includes many kinds of voices and experiences.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       RESEARCH PURPOSE
+  ══════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-label">Research Purpose</span>
+        <h2>What This Project Sets Out to Do</h2>
+        <p>IDOGO is designed to be a long-term reference point for anyone interested in the relationship between language, power, and education.</p>
+      </div>
+
+      <div class="why-matters-grid">
+
+        <div class="why-card">
+          <span class="why-card-number">01</span>
+          <h4>Document and Share</h4>
+          <p>Gather conversations, papers, reflections, and events in one accessible place so the work does not get scattered or lost.</p>
+        </div>
+
+        <div class="why-card">
+          <span class="why-card-number">02</span>
+          <h4>Connect Scholars and Communities</h4>
+          <p>Bridge the gap between academic research and lived experience by centering both expert knowledge and community wisdom.</p>
+        </div>
+
+        <div class="why-card">
+          <span class="why-card-number">03</span>
+          <h4>Support Student Development</h4>
+          <p>Give students a meaningful role in research &mdash; not just as subjects of study but as contributors, thinkers, and co-creators.</p>
+        </div>
+
+        <div class="why-card">
+          <span class="why-card-number">04</span>
+          <h4>Make Research Accessible</h4>
+          <p>Ensure that the project's findings and conversations are available to anyone, not just those inside academic institutions.</p>
+        </div>
+
+        <div class="why-card">
+          <span class="why-card-number">05</span>
+          <h4>Build a Long-Term Reference</h4>
+          <p>Create a resource that grows over time and becomes a reliable reference point for the study of language, colonialism, and education.</p>
+        </div>
+
+        <div class="why-card">
+          <span class="why-card-number">06</span>
+          <h4>Invite Critical Inquiry</h4>
+          <p>Encourage questions, disagreement, and dialogue &mdash; this project is not just about answers but about asking better questions together.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       WHY THIS PROJECT MATTERS
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="principles-wrap">
+
+        <div class="principles-text">
+          <span class="section-label" style="color:var(--border);">Why It Matters</span>
+          <h2>The Stakes of This Work</h2>
+          <p>Colonial languages did not disappear when empires formally ended. They live on in curricula, in the language of academic success, and in who feels they belong in a classroom. IDOGO takes these questions seriously because the stakes are real for students and communities today.</p>
+        </div>
+
+        <div class="principles-list">
+
+          <div class="principle-item">
+            <div class="principle-dot"></div>
+            <p>Millions of students around the world are educated in languages that are not their own &mdash; a direct legacy of colonial schooling systems.</p>
+          </div>
+
+          <div class="principle-item">
+            <div class="principle-dot"></div>
+            <p>Institutional language shapes who is seen as intelligent, capable, and worthy of advancement within educational systems.</p>
+          </div>
+
+          <div class="principle-item">
+            <div class="principle-dot"></div>
+            <p>Community and indigenous knowledge continues to be undervalued in formal educational settings, limiting what counts as legitimate learning.</p>
+          </div>
+
+          <div class="principle-item">
+            <div class="principle-dot"></div>
+            <p>Student identity, belonging, and mental well-being are deeply affected by whether their language and culture are honored in school.</p>
+          </div>
+
+          <div class="principle-item">
+            <div class="principle-dot"></div>
+            <p>Understanding these dynamics is the first step toward building more equitable, inclusive, and human educational environments.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       TEAM
+  ══════════════════════════════════════════════════════ -->
+  <section class="section" id="team">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-label">The Team</span>
+        <h2>Who Is Behind IDOGO</h2>
+        <p>The project brings together a faculty lead and student researchers from Lake Forest College, united by a shared commitment to making research accessible, rigorous, and community-centered.</p>
+      </div>
+
+      <div class="team-grid">
+
+        <!-- Professor Odugu — Lead -->
+        <div class="bio-card-lead">
+          <div class="bio-avatar" style="background-color:var(--border); overflow:hidden;">
+            <img src="assets/team/odugu.jpg" alt="Professor Ike Desmond Odugu" style="width:100%; height:100%; object-fit:cover;" />
+          </div>
+          <div>
+            <h3>Ike Desmond Odugu</h3>
+            <span class="bio-role">Principal Investigator &amp; Project Lead</span>
+            <p>Ike Desmond Odugu is Professor of Education and the chair of Education at Lake Forest College. He holds a Ph.D. in Comparative and International Education from Loyola University Chicago. In addition to his research on linguistic processes, education, and social change in the Global South, as well as race, space, and education in the United States, he explores the history and historiography of education in the African context.</p>
+            <p>His interest spans epistemic reconsiderations of colonial education historiography, oral history, and indigenous African educational processes prior to and since colonial encounters. He is also the director of the International Network for Action Research on Education, Language, and Society (INARELS).</p>
+            <div class="bio-interests">
+              <span class="bio-interest-tag">Language Policy</span>
+              <span class="bio-interest-tag">Colonial Education</span>
+              <span class="bio-interest-tag">Student Development</span>
+              <span class="bio-interest-tag">History of Education</span>
+              <span class="bio-interest-tag">Knowledge Access</span>
+              <span class="bio-interest-tag">INARELS Director</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gavela Maculuve -->
+        <div class="bio-card">
+          <div class="bio-avatar" style="background-color:var(--border); overflow:hidden;">
+            <img src="assets/team/gavela.jpg" alt="Gavela Maculuve" style="width:100%; height:100%; object-fit:cover;" />
+          </div>
+          <h3>Gavela Maculuve</h3>
+          <span class="bio-role">Student Researcher &mdash; Class of &rsquo;28</span>
+          <p>Gavela is a student researcher at Lake Forest College majoring in Computer Science and Data Science, with a minor in French. He contributes technical and analytical skills to the IDOGO project.</p>
+          <div class="bio-interests">
+            <span class="bio-interest-tag">Computer Science</span>
+            <span class="bio-interest-tag">Data Science</span>
+            <span class="bio-interest-tag">French</span>
+          </div>
+        </div>
+
+        <!-- Neema Joan Nelson -->
+        <div class="bio-card">
+          <div class="bio-avatar" style="background-color:var(--border); overflow:hidden;">
+            <img src="assets/team/neema.jpg" alt="Neema Joan Nelson" style="width:100%; height:100%; object-fit:cover;" />
+          </div>
+          <h3>Neema Joan Nelson</h3>
+          <span class="bio-role">Student Researcher &mdash; Class of &rsquo;28</span>
+          <p>Neema is a student researcher at Lake Forest College majoring in Economics and Communications. She brings her interest in how language, media, and economic systems intersect to the IDOGO project.</p>
+          <div class="bio-interests">
+            <span class="bio-interest-tag">Economics</span>
+            <span class="bio-interest-tag">Communications</span>
+          </div>
+        </div>
+
+        <!-- Emily Vaz -->
+        <div class="bio-card">
+          <div class="bio-avatar" style="background-color:var(--border); overflow:hidden;">
+            <img src="assets/team/emily.jpg" alt="Emily Vaz" style="width:100%; height:100%; object-fit:cover;" />
+          </div>
+          <h3>Emily Vaz</h3>
+          <span class="bio-role">Student Researcher &mdash; Class of &rsquo;28</span>
+          <p>Emily is a student researcher at Lake Forest College majoring in Psychology and African American Studies. She brings a critical lens on identity, race, and belonging to the project&rsquo;s core research themes.</p>
+          <div class="bio-interests">
+            <span class="bio-interest-tag">Psychology</span>
+            <span class="bio-interest-tag">African American Studies</span>
+          </div>
+        </div>
+
+        <!-- Dayyan Fundi -->
+        <div class="bio-card">
+          <div class="bio-avatar" style="background-color:var(--border); overflow:hidden;">
+            <img src="assets/team/dayyan.jpg" alt="Dayyan Fundi" style="width:100%; height:100%; object-fit:cover;" />
+          </div>
+          <h3>Dayyan Fundi</h3>
+          <span class="bio-role">Student Research Assistant &mdash; Class of &rsquo;28</span>
+          <p>Dayyan is a student research assistant at Lake Forest College majoring in Data Science and Economics, with a minor in Physics. He supports the project&rsquo;s digital and research infrastructure.</p>
+          <div class="bio-interests">
+            <span class="bio-interest-tag">Data Science</span>
+            <span class="bio-interest-tag">Economics</span>
+            <span class="bio-interest-tag">Physics</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       PROJECT VALUES
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--alt">
+    <div class="container">
+
+      <div class="section-header text-center">
+        <span class="section-label">Project Values</span>
+        <h2>What We Stand For</h2>
+        <p>These values guide how IDOGO operates, how it treats contributors, and what it hopes to build over time.</p>
+      </div>
+
+      <div class="values-grid">
+
+        <div class="value-card">
+          <span class="value-icon">&#128214;</span>
+          <h4>Accessibility</h4>
+          <p>Research should be readable and usable by anyone &mdash; not just those with academic training. We write for broad audiences without sacrificing depth.</p>
+        </div>
+
+        <div class="value-card">
+          <span class="value-icon">&#128269;</span>
+          <h4>Critical Inquiry</h4>
+          <p>We ask hard questions about systems, institutions, and assumptions &mdash; including our own. Disagreement and dialogue are welcome here.</p>
+        </div>
+
+        <div class="value-card">
+          <span class="value-icon">&#127757;</span>
+          <h4>Community Engagement</h4>
+          <p>The people most affected by colonial language systems are central to this project &mdash; as participants, contributors, and co-thinkers.</p>
+        </div>
+
+        <div class="value-card">
+          <span class="value-icon">&#129309;</span>
+          <h4>Mutual Learning</h4>
+          <p>Experts have much to learn from non-experts. We are committed to a model where knowledge flows in all directions, not just top-down.</p>
+        </div>
+
+        <div class="value-card">
+          <span class="value-icon">&#127775;</span>
+          <h4>Long-Term Commitment</h4>
+          <p>IDOGO is designed to grow over time. We are building something that will still be valuable and relevant years from now.</p>
+        </div>
+
+        <div class="value-card">
+          <span class="value-icon">&#9878;</span>
+          <h4>Scholarly Rigor</h4>
+          <p>We take ideas seriously. The project is grounded in careful research, honest engagement with evidence, and intellectual honesty.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       CTA
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--dark">
+    <div class="container text-center">
+      <span class="section-label" style="color:var(--border);">Get Involved</span>
+      <h2 style="color:var(--surface); margin-bottom:16px;">Want to Be Part of IDOGO?</h2>
+      <p style="color:var(--border); margin:0 auto 32px; font-size:1.05rem;">Whether you are a student, researcher, educator, or community member &mdash; there is a place for you in this project. Reach out or explore what we have built so far.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="community.html#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="themes.html" class="btn btn-outline-white">Explore Our Themes</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <div>
+          <div class="footer-brand">
+            <div class="footer-logo-placeholder">Logo</div>
+            <div class="footer-brand-text">
+              <span class="footer-name">IDOGO</span>
+              <span class="footer-sub">Language &amp; Colonial Legacy</span>
+            </div>
+          </div>
+          <p class="footer-desc">A public research hub exploring how colonial and institutional languages shape education, student development, and knowledge access. Led by Professor Odugu.</p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Pages</h5>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About IDOGO</a></li>
+            <li><a href="themes.html">Research Themes</a></li>
+            <li><a href="library.html">Library</a></li>
+            <li><a href="community.html">Community</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="community.html#contact">Send a Message</a></li>
+            <li><a href="community.html">Join the Community</a></li>
+            <li><a href="library.html">Browse Resources</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 IDOGO &mdash; Language, Education, and Colonial Legacy Research Project. All rights reserved.</p>
+        <p>Led by Professor Odugu</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

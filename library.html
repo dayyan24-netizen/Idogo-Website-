@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="IDOGO Library — Videos, research papers, and reflections on language, colonial education, and student development." />
+  <title>Library — IDOGO</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Library-page-specific styles ── */
+
+    /* Tab bar */
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 40px;
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      padding: 12px 22px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--accent);
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Tab panels — hidden by default, shown by JS */
+    .tab-panel {
+      display: none;
+    }
+
+    /* Featured video strip */
+    .featured-strip {
+      background-color: var(--heading);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 36px;
+      align-items: center;
+      margin-bottom: 56px;
+    }
+
+    .featured-strip h2 {
+      color: var(--surface);
+      margin-bottom: 12px;
+    }
+
+    .featured-strip .section-label {
+      color: var(--border);
+    }
+
+    .featured-strip p {
+      color: var(--border);
+      margin-bottom: 20px;
+    }
+
+    .featured-strip .video-meta {
+      margin-bottom: 22px;
+    }
+
+    .featured-strip .video-meta span {
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Video category label */
+    .category-label {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+      background-color: var(--accent);
+      border-radius: 4px;
+      padding: 3px 9px;
+      display: inline-block;
+      margin-bottom: 14px;
+    }
+
+    /* Video category section */
+    .video-category {
+      margin-bottom: 48px;
+    }
+
+    .video-category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .video-category-header h3 {
+      font-size: 1.2rem;
+    }
+
+    .video-category-header span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* Resources list */
+    .resources-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Reflections grid */
+    .reflections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    /* Panel intro text */
+    .panel-intro {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .panel-intro-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .panel-intro h4 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .panel-intro p {
+      font-size: 0.9rem;
+      max-width: 100%;
+    }
+
+    /* Submit reflection CTA */
+    .submit-reflection {
+      background-color: var(--bg);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .submit-reflection h4 {
+      margin-bottom: 8px;
+    }
+
+    .submit-reflection p {
+      font-size: 0.95rem;
+      margin: 0 auto 20px;
+      max-width: 480px;
+    }
+
+    /* Resource category headers */
+    .resource-category-title {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 32px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .resource-category-title:first-child {
+      margin-top: 0;
+    }
+
+    /* Placeholder notice */
+    .placeholder-notice {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    /* No-results notice for empty categories */
+    .coming-soon-card {
+      background-color: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .coming-soon-card span {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .coming-soon-card p {
+      font-size: 0.9rem;
+      max-width: 100%;
+    }
+
+    @media (max-width: 860px) {
+      .featured-strip {
+        grid-template-columns: 1fr;
+        padding: 28px 24px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .tab-btn {
+        padding: 10px 14px;
+        font-size: 0.87rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       FLOATING BANNER
+  ══════════════════════════════════════════════════════ -->
+  <div id="floating-banner" class="floating-banner" style="display:none;">
+    &#127775; New research conversation added &mdash;
+    <a href="#tab-videos">Watch the latest video</a>
+    <button id="banner-close" class="banner-close" aria-label="Dismiss banner">&times;</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════════════════════════ -->
+  <nav class="site-nav" id="site-nav">
+    <div class="container">
+      <div class="nav-inner">
+
+        <a href="index.html" class="nav-logo">
+          <div class="logo-placeholder">Logo</div>
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">IDOGO</span>
+            <span class="nav-brand-sub">Language &amp; Colonial Legacy</span>
+          </div>
+        </a>
+
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="themes.html">Themes</a></li>
+          <li><a href="library.html">Library</a></li>
+          <li><a href="community.html">Community</a></li>
+        </ul>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+      </div>
+
+      <ul class="nav-mobile" id="nav-mobile">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="themes.html">Themes</a></li>
+        <li><a href="library.html">Library</a></li>
+        <li><a href="community.html">Community</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       PAGE HERO
+  ══════════════════════════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="section-label">Videos, Resources &amp; Reflections</span>
+      <h1>The IDOGO Library</h1>
+      <p>Everything in one place &mdash; video conversations, research papers, downloadable materials, and short reflections from scholars, students, and community members.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       FEATURED VIDEO
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--alt">
+    <div class="container">
+
+      <div class="featured-strip">
+
+        <div class="video-embed-wrap">
+          <!-- Replace VIDEO_ID with the real YouTube video ID -->
+          <iframe
+            src="https://www.youtube.com/embed/VIDEO_ID"
+            title="IDOGO Featured Video"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div>
+          <span class="section-label">Featured Conversation</span>
+          <span class="category-label">Research Talk</span>
+          <h2>Language, Power, and the Colonial Classroom</h2>
+          <p>Professor Odugu introduces the central questions of the IDOGO project, exploring how colonial languages entered schools, what they were designed to achieve, and what it costs students to be educated in a language not their own.</p>
+          <div class="video-meta">
+            <span>&#127908; Prof. Odugu</span>
+            <span>&nbsp;&middot;&nbsp;</span>
+            <span>&#128197; 2024</span>
+            <span>&nbsp;&middot;&nbsp;</span>
+            <span>&#9654; Research Talk</span>
+          </div>
+          <a href="https://www.youtube.com/watch?v=VIDEO_ID" target="_blank" class="btn btn-primary">Watch on YouTube &rarr;</a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       TABBED LIBRARY
+  ══════════════════════════════════════════════════════ -->
+  <section class="section" id="tab-videos">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-label">Browse the Library</span>
+        <h2>Videos, Resources &amp; Reflections</h2>
+        <p>Use the tabs below to navigate between video conversations, research materials, and short reflections.</p>
+      </div>
+
+      <!-- Tab buttons -->
+      <div class="tab-bar">
+        <button class="tab-btn" data-tab="panel-videos">&#127916; Videos</button>
+        <button class="tab-btn" data-tab="panel-resources">&#128196; Resources</button>
+        <button class="tab-btn" data-tab="panel-reflections">&#9997; Reflections</button>
+      </div>
+
+      <!-- ════════════════════════════
+           TAB 1: VIDEOS
+      ════════════════════════════ -->
+      <div class="tab-panel" id="panel-videos">
+
+        <div class="placeholder-notice">
+          &#128204; Video links and thumbnails below are placeholders. Replace each <strong>VIDEO_ID</strong> with the real YouTube video ID and update titles, speakers, and dates as new content is added.
+        </div>
+
+        <!-- Category: Interviews -->
+        <div class="video-category">
+          <div class="video-category-header">
+            <h3>Interviews</h3>
+            <span>2 videos</span>
+          </div>
+          <div class="cards-grid-3">
+
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <img src="https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg" alt="Video thumbnail" />
+                <div class="video-play-icon">&#9654;</div>
+              </div>
+              <div class="video-card-body">
+                <span class="category-label">Interview</span>
+                <h4>Language and the Colonized Classroom: A Conversation</h4>
+                <p>An in-depth interview exploring how colonial language systems were embedded into school structures and what persists today.</p>
+                <div class="video-meta">
+                  <span>&#127908; Prof. Odugu</span>
+                  <span>&#128197; 2024</span>
+                </div>
+                <a href="https://www.youtube.com/watch?v=VIDEO_ID" target="_blank" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Watch Video &rarr;</a>
+              </div>
+            </div>
+
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <img src="https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg" alt="Video thumbnail" />
+                <div class="video-play-icon">&#9654;</div>
+              </div>
+              <div class="video-card-body">
+                <span class="category-label">Interview</span>
+                <h4>What Does It Mean to Belong in School?</h4>
+                <p>A conversation with students and educators about language, identity, and the experience of feeling like an outsider in one's own classroom.</p>
+                <div class="video-meta">
+                  <span>&#127908; Student Panel</span>
+                  <span>&#128197; 2024</span>
+                </div>
+                <a href="https://www.youtube.com/watch?v=VIDEO_ID" target="_blank" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Watch Video &rarr;</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Category: Research Talks -->
+        <div class="video-category">
+          <div class="video-category-header">
+            <h3>Research Talks</h3>
+            <span>2 videos</span>
+          </div>
+          <div class="cards-grid-3">
+
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <img src="https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg" alt="Video thumbnail" />
+                <div class="video-play-icon">&#9654;</div>
+              </div>
+              <div class="video-card-body">
+                <span class="category-label">Research Talk</span>
+                <h4>Language Policy and Educational Inequality</h4>
+                <p>A research presentation examining the relationship between language-of-instruction decisions and student outcomes across postcolonial nations.</p>
+                <div class="video-meta">
+                  <span>&#127908; Prof. Odugu</span>
+                  <span>&#128197; 2024</span>
+                </div>
+                <a href="https://www.youtube.com/watch?v=VIDEO_ID" target="_blank" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Watch Video &rarr;</a>
+              </div>
+            </div>
+
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <img src="https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg" alt="Video thumbnail" />
+                <div class="video-play-icon">&#9654;</div>
+              </div>
+              <div class="video-card-body">
+                <span class="category-label">Research Talk</span>
+                <h4>Community Knowledge as Academic Resource</h4>
+                <p>Exploring how non-expert and community knowledge can be integrated into formal research frameworks without being exploited or diluted.</p>
+                <div class="video-meta">
+                  <span>&#127908; Research Team</span>
+                  <span>&#128197; 2024</span>
+                </div>
+                <a href="https://www.youtube.com/watch?v=VIDEO_ID" target="_blank" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Watch Video &rarr;</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Category: Public Lectures -->
+        <div class="video-category">
+          <div class="video-category-header">
+            <h3>Public Lectures</h3>
+            <span>1 video</span>
+          </div>
+          <div class="cards-grid-3">
+
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <img src="https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg" alt="Video thumbnail" />
+                <div class="video-play-icon">&#9654;</div>
+              </div>
+              <div class="video-card-body">
+                <span class="category-label">Public Lecture</span>
+                <h4>The Long Shadow of Colonial Education</h4>
+                <p>A public lecture tracing the historical arc from colonial schooling policies to contemporary language challenges in education systems worldwide.</p>
+                <div class="video-meta">
+                  <span>&#127908; Prof. Odugu</span>
+                  <span>&#128197; 2023</span>
+                </div>
+                <a href="https://www.youtube.com/watch?v=VIDEO_ID" target="_blank" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Watch Video &rarr;</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Category: Student Discussions -->
+        <div class="video-category">
+          <div class="video-category-header">
+            <h3>Student Discussions</h3>
+            <span>1 video</span>
+          </div>
+          <div class="cards-grid-3">
+
+            <div class="video-card">
+              <div class="video-thumbnail">
+                <img src="https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg" alt="Video thumbnail" />
+                <div class="video-play-icon">&#9654;</div>
+              </div>
+              <div class="video-card-body">
+                <span class="category-label">Student Discussion</span>
+                <h4>Students Speak: Language, Identity, and the Classroom</h4>
+                <p>A roundtable featuring student researchers and contributors sharing their own experiences navigating language expectations in educational settings.</p>
+                <div class="video-meta">
+                  <span>&#127908; Student Panel</span>
+                  <span>&#128197; 2024</span>
+                </div>
+                <a href="https://www.youtube.com/watch?v=VIDEO_ID" target="_blank" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Watch Video &rarr;</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Category: Community Conversations -->
+        <div class="video-category">
+          <div class="video-category-header">
+            <h3>Community Conversations</h3>
+            <span>Coming soon</span>
+          </div>
+          <div class="coming-soon-card">
+            <span>&#127908;</span>
+            <h4>Community conversations coming soon</h4>
+            <p>Videos featuring educators, practitioners, and community members will be added here as the project grows. Check back or follow updates on the Community page.</p>
+          </div>
+        </div>
+
+      </div>
+      <!-- end panel-videos -->
+
+      <!-- ════════════════════════════
+           TAB 2: RESOURCES
+      ════════════════════════════ -->
+      <div class="tab-panel" id="panel-resources">
+
+        <div class="panel-intro">
+          <span class="panel-intro-icon">&#128196;</span>
+          <div>
+            <h4>Research Papers, Books &amp; Reports</h4>
+            <p>Core academic works that inform the IDOGO project &mdash; covering language policy, colonial education, multilingualism, and student development. Click any title to access the PDF directly, or visit the publisher&rsquo;s page for further reading.</p>
+          </div>
+        </div>
+
+        <!-- ── JOURNAL ARTICLES ── -->
+        <p class="resource-category-title">Journal Articles</p>
+        <div class="resources-list">
+
+          <!-- Odugu 2023 historiographic review -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128221;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Journal Article</span>
+              <h4>Education in Africa: A Critical Historiographic Review</h4>
+              <p><strong>Desmond Ikenna Odugu</strong> &mdash; <em>History of Education: Journal of the History of Education Society</em>, Vol. 52, No. 2&ndash;3, pp. 220&ndash;245, 2023.</p>
+              <p>This article interrogates the very possibility of writing a unified history of education in Africa, arguing that the field has been shaped by competing philosophical, anthropological, and ideological frameworks that reveal as much about the historians as about Africa itself. Odugu critiques scholars&rsquo; long preoccupation with colonial education as the defining event of African educational history, identifies epistemic ruptures in the quest for historical truth, and proposes a decolonial approach that centers Africans in their own historical narratives.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Odugu (2023) Education in Africa a critical historiographic review.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://doi.org/10.1080/0046760X.2023.2182914" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View in Journal &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Odugu 2022 translanguaging -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128221;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Journal Article</span>
+              <h4>Translanguaging as Decolonial Praxis: Pedagogic and Epistemic Thrusts in the Politics of Official Knowledge</h4>
+              <p><strong>Desmond I. Odugu</strong> &mdash; <em>Journal of Multilingual Theory and Practice (JMTP)</em>, Vol. 3, No. 1, pp. 27&ndash;52, 2022.</p>
+              <p>Drawing on two emergency remote courses taught during the Covid-19 pandemic, this article examines translanguaging &mdash; the fluid use of multiple languages as a unified repertoire &mdash; as a form of decolonial practice in US higher education. Odugu argues that the institutional formations of schooling (how knowledge is reproduced, structured, and transmitted) fundamentally undercut the political logic of translanguaging, and that genuine epistemic shifts require not just language policy changes but radical transformations in how institutions understand and organize knowledge itself.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Odugu (2022) Translanguaging as Decolonial Praxis - JMTP.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://doi.org/10.1558/jmtp.21483" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View in Journal &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Odugu & Lemieux 2019 -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128221;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Journal Article</span>
+              <h4>Transitional Multilingual Education Policies in Africa: Necessary Compromise or Strategic Impediment?</h4>
+              <p><strong>Desmond I. Odugu &amp; Camille N. Lemieux</strong> &mdash; <em>Language and Education</em>, Vol. 33, No. 3, pp. 263&ndash;281, 2019.</p>
+              <p>This ethnographic study investigates why African education systems remain locked in transitional multilingual policies that use native languages only in early primary school before switching to colonial languages &mdash; despite decades of scholarship showing the benefits of full native-language-based instruction. Through interviews with parents, educators, researchers, and policymakers, Odugu and Lemieux find that the very way multilingual education is advocated sends mixed messages that fuel local resistance. They argue that transitional multilingualism is not a neutral compromise but an inherently hierarchical arrangement that undermines the goals it claims to serve.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Odugu & Lemieux (2019) Transitinoal Multilingual Education Policies in Africa_ Necessary Compromise or Strategic Impediment_.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://doi.org/10.1080/09500782.2018.1513027" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View in Journal &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Odugu 2015 antinomies -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128221;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Journal Article</span>
+              <h4>Antinomies of Ideologies and Situationality of Education Language Politics in Multilingual Contexts</h4>
+              <p><strong>Desmond Ikenna Odugu</strong> &mdash; <em>International Multilingual Research Journal</em>, Vol. 9, No. 3, pp. 137&ndash;158, 2015.</p>
+              <p>This article examines the dominant frameworks used to debate language planning in multilingual societies &mdash; particularly the &ldquo;language as right&rdquo; versus &ldquo;language as resource&rdquo; debate &mdash; and argues that both deploy criteria of rationality and social justice that are disconnected from how real multilingual communities actually function. Drawing on ethnographic evidence from India and Nigeria, Odugu calls for an integrative, dialogic approach to language policy that is tentative and responsive to complex local realities rather than bound by rigid ideological positions.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Odugu (2015) Antinomies of Ideologies and Situationality of Education Language Politics in Multililngual Contexts.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://doi.org/10.1080/19313152.2015.1047703" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View in Journal &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Odugu 2014 indigenous discourses -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128221;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Journal Article</span>
+              <h4>Indigenous Discourses on Knowledge and Development in Africa</h4>
+              <p><strong>Desmond Ikenna Odugu</strong> &mdash; 2014.</p>
+              <p>This article explores how indigenous African frameworks for understanding knowledge and development have been systematically marginalized by Western-centric development discourse and colonial education systems. Odugu argues that genuine educational development in Africa requires taking indigenous epistemologies seriously &mdash; not as folklore or tradition, but as sophisticated systems of thought that offer practical and philosophical resources for reimagining schooling, knowledge production, and community development on African terms.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Odugu (2014) Indigenous Discourses on Knowledge.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── BOOKS ── -->
+        <p class="resource-category-title">Books</p>
+        <div class="resources-list">
+
+          <!-- Fafunwa 1989 -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Book</span>
+              <h4>Language of Education in Africa</h4>
+              <p><strong>A. Babs Fafunwa, J. I. Macauley &amp; J. A. F. Sokoya (Eds.)</strong> &mdash; <em>University of Ife Press</em>, 1989.</p>
+              <p>A landmark edited volume that emerged from the Ife Six-Year Primary Project in Nigeria &mdash; one of the most significant mother-tongue education experiments in Africa. The book makes a compelling case for using African languages as the primary medium of instruction in primary schools, documenting evidence that children learn more effectively in their home language. It remains a foundational reference for debates about language and education across the African continent.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Fafunwa1989.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Benson & Kosonen 2013 -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Book</span>
+              <h4>Language Issues in Comparative Education: Inclusive Teaching and Learning in Non-Dominant Languages and Cultures</h4>
+              <p><strong>Carol Benson &amp; Kimmo Kosonen (Eds.)</strong> &mdash; <em>SensePublishers (Comparative and International Education: A Diversity of Voices, Vol. 24)</em>, 2013.</p>
+              <p>This edited volume brings together 22 authors to examine how non-dominant home languages can be used in schools to achieve more inclusive and equitable education. Covering countries across Asia (Afghanistan, Bangladesh, Cambodia, Philippines, Thailand, Vietnam), Latin America (Guatemala, Mexico), Africa (Mozambique, Senegal, Tanzania), and North America (Canada, USA), the book demonstrates that bringing students&rsquo; home languages into the classroom has transformative, liberatory potential &mdash; particularly for communities historically excluded from quality basic education.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/benson&kosonen.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://www.sensepublishers.com/catalogs/bookseries/comparative-and-international-education-a-diversity-of-voices/language-issues-in-comparative-education/" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View Publisher &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cummins 2000 -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Book</span>
+              <h4>Language, Power and Pedagogy: Bilingual Children in the Crossfire</h4>
+              <p><strong>Jim Cummins</strong> &mdash; <em>Multilingual Matters</em>, Clevedon, England, 2000.</p>
+              <p>Drawing on 25 years of research, Cummins challenges politically motivated attacks on bilingual education by presenting a rigorous, learner-centered analysis of language, cognition, and pedagogy. The book revisits his landmark theories &mdash; including the Interdependence Hypothesis and the distinction between conversational and academic language proficiency &mdash; in light of new evidence. Cummins argues that educators and researchers have the power to address language-based inequity and pushes for policy and practice that honors the linguistic and cognitive resources bilingual children bring to school.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/cummins2000.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://multilingual-matters.com/page/detail/language-power-and-pedagogy/?k=9781853594748" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View Publisher &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Djite 1994 -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Book / Report</span>
+              <h4>From Language Policy to Language Planning: An Overview of Languages Other Than English in Australian Education</h4>
+              <p><strong>Paulin G. Djit&eacute;</strong> &mdash; <em>Australian National Languages and Literacy Institute (NLLIA)</em>, Deakin, 1994.</p>
+              <p>This report examines the sociolinguistic landscape of nine languages other than English (LOTE) commonly used in Australia &mdash; Arabic, Chinese, French, German, Modern Greek, Indonesian/Malay, Italian, Japanese, and Spanish &mdash; and their implications for public education policy and language planning. It traces the history of Commonwealth and state language policies, explores the relationship between language and trade, and presents data from a national student attitude survey. An essential reference for understanding how multilingual communities navigate official language systems.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/djite1994.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ouane & Glanz 2011 -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Book / Report</span>
+              <h4>Optimising Learning, Education and Publishing in Africa: The Language Factor. A Review and Analysis of Theory and Practice in Mother-Tongue and Bilingual Education in sub-Saharan Africa</h4>
+              <p><strong>Adama Ouane &amp; Christine Glanz (Eds.)</strong> &mdash; <em>UNESCO Institute for Lifelong Learning (UIL) &amp; Association for the Development of Education in Africa (ADEA)</em>, Hamburg, 2011.</p>
+              <p>A comprehensive review of the theory and practice of mother-tongue and bilingual education across sub-Saharan Africa. The report covers language politics and planning history, teaching practices in familiar languages, case studies from Benin, Burkina Faso, Cameroon, Mali, Tanzania, and Zambia, and the economics of financing mother-tongue education. It makes a strong evidence-based case that educating children in a language they know produces better learning outcomes and argues for a fundamental rethinking of language-in-education policy across the continent.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/quane&glanz.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://uil.unesco.org/literacy/optimising-learning-education-and-publishing-africa-language-factor" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View at UNESCO UIL &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Odugu 2023 Palimpsest -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Book Chapter</span>
+              <h4>Palimpsest of Tangled Dramas: Language and Education Beyond Institutional Formations</h4>
+              <p><strong>Desmond Ikenna Odugu</strong> &mdash; Book chapter, 2023.</p>
+              <p>Using the literary metaphor of a palimpsest &mdash; a manuscript where older writing shows through beneath newer layers &mdash; Odugu examines how the histories of language and education overlap, contradict, and complicate each other in ways that institutional frameworks struggle to contain. The chapter argues that language in education is never a clean, settled arrangement but a layered drama of colonial impositions, indigenous resistances, political negotiations, and lived experiences that continue to shape classrooms and communities today.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Odugu (2023) Palimpsest of Tangled Dramas_ Language and Education Beyond Institutional Formations.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Odugu 2019 Language Revolution -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Book Chapter</span>
+              <h4>Language Revolution: Education and Social Change at Linguistic Crossroads</h4>
+              <p><strong>Desmond Ikenna Odugu</strong> &mdash; Book chapter, 2019.</p>
+              <p>This chapter positions language not merely as a tool of communication but as a site of social struggle &mdash; a place where competing visions of education, identity, and power collide. Odugu examines how moments of political and educational transformation become &ldquo;linguistic crossroads&rdquo; where the choice of language carries enormous stakes for communities, nations, and individual students. The chapter draws on African and global contexts to argue that genuine educational change requires confronting, not bypassing, the language question.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Odugu (2019) Language Revolution_ Education and Social Change at Linguistic Crossroads.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Odugu 2017 Linguistic Diversity chapter -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Book Chapter</span>
+              <h4>Linguistic Diversity and Education: From Incremental Reform to Radical Social Change</h4>
+              <p><strong>Desmond Ikenna Odugu</strong> &mdash; In E. Shizha &amp; N. Makuvaza (Eds.), <em>Re-thinking Postcolonial Education in Sub-Saharan Africa in the 21st Century: Post-Millennium Development Goals</em>, pp. 127&ndash;140. SensePublishers, 2017.</p>
+              <p>This chapter traces the dramatic shift in scholarly consensus on multilingualism &mdash; from viewing it as a cognitive and social burden to recognizing it as a powerful resource &mdash; and asks why this shift has not translated into meaningful policy change across sub-Saharan Africa. Odugu argues that incremental reform within existing colonial education structures is insufficient and that achieving the genuine benefits of linguistic diversity in African schools requires a more radical reimagining of what education is for and whose interests it serves.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Odugu (2017) Linguistic Diversity and Education_ From Incremental Reform to Radical Social Change.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://www.sensepublishers.com/catalogs/bookseries/other-books/re-thinking-postcolonial-education-in-sub-saharan-africa-in-the-21st-century/" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View Publisher &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Odugu 2017 full book -->
+          <div class="resource-item">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Book</span>
+              <h4>Re-thinking Postcolonial Education in Sub-Saharan Africa in the 21st Century: Post-Millennium Development Goals</h4>
+              <p><strong>Edward Shizha &amp; Ngoni Makuvaza (Eds.)</strong> &mdash; <em>SensePublishers</em>, Rotterdam, 2017. <em>(Includes chapter by Desmond Ikenna Odugu)</em></p>
+              <p>This edited volume assembles African scholars to evaluate what postcolonial Sub-Saharan African countries have achieved in education since independence and after the 2015 Millennium Development Goals. It offers home-grown African perspectives on the barriers to sustainable, equitable education &mdash; including language, curriculum, policy, and institutional legacies of colonialism. Odugu&rsquo;s chapter on linguistic diversity appears in this volume. The book is aimed at scholars, graduate students, policymakers, and NGOs engaged with African education.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/Odugu (2017) re-thinking-postcolonial-education-in-sub-saharan-africa-in-the-21st-century.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://www.sensepublishers.com/catalogs/bookseries/other-books/re-thinking-postcolonial-education-in-sub-saharan-africa-in-the-21st-century/" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View Publisher &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── UNESCO REPORTS ── -->
+        <p class="resource-category-title">UNESCO Policy Reports</p>
+        <div class="resources-list">
+
+          <!-- UNESCO 1953 -->
+          <div class="resource-item">
+            <div class="resource-icon">&#127982;</div>
+            <div class="resource-body">
+              <span class="resource-tag">UNESCO Report</span>
+              <h4>The Use of Vernacular Languages in Education</h4>
+              <p><strong>UNESCO</strong> &mdash; <em>Monographs on Fundamental Education, No. VIII</em>, Paris, 1953.</p>
+              <p>One of the most cited and historically significant documents in the field of language and education, this UNESCO report established the principle that every child has the right to begin their education in their mother tongue. It examined the psychological, educational, and social arguments for vernacular-language instruction and challenged the dominance of colonial languages in schools. Though written over seventy years ago, its core argument remains urgently relevant and continues to be debated by scholars, policymakers, and educators worldwide.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/unesco1953.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://unesdoc.unesco.org/ark:/48223/pf0000002930" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View at UNESCO &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- UNESCO 2003 -->
+          <div class="resource-item">
+            <div class="resource-icon">&#127982;</div>
+            <div class="resource-body">
+              <span class="resource-tag">UNESCO Report</span>
+              <h4>Education in a Multilingual World</h4>
+              <p><strong>UNESCO</strong> &mdash; <em>UNESCO Education Position Paper</em> (ED-2003/WS/2), Paris, 2003.</p>
+              <p>This UNESCO position paper sets out the organization&rsquo;s official stance on language and education, organized around three principles: that UNESCO supports mother-tongue instruction as a means of improving educational quality; that UNESCO promotes multilingual education as essential for inclusion; and that UNESCO supports language learning as central to intercultural dialogue and respect. The paper surveys the international normative framework &mdash; UN instruments, UNESCO conventions, and outcomes from international conferences &mdash; and offers practical guidelines for language and education policy at the national level.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <a href="assets/publications/unesco2003.pdf" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#128196; Download PDF</a>
+                <a href="https://unesdoc.unesco.org/ark:/48223/pf0000127583" target="_blank" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">&#127760; View at UNESCO &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── GUIDES (kept for future use) ── -->
+        <p class="resource-category-title">Guides &amp; Reference Documents</p>
+        <div class="resources-list">
+
+          <div class="resource-item">
+            <div class="resource-icon">&#128196;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Guide</span>
+              <h4>How to Engage with IDOGO as a Non-Expert</h4>
+              <p>A short guide explaining how community members, students, and non-academic readers can participate in and contribute to the IDOGO project. No academic background required.</p>
+              <a href="#" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">Coming Soon</a>
+            </div>
+          </div>
+
+          <div class="resource-item">
+            <div class="resource-icon">&#128196;</div>
+            <div class="resource-body">
+              <span class="resource-tag">Reference</span>
+              <h4>Key Terms in Colonial Language and Education Research</h4>
+              <p>A reference glossary defining the key concepts used across the IDOGO project &mdash; from &ldquo;medium of instruction&rdquo; to &ldquo;linguistic imperialism&rdquo; and &ldquo;postcolonial education.&rdquo;</p>
+              <a href="#" class="btn btn-outline" style="font-size:0.83rem; padding:7px 16px;">Coming Soon</a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <!-- end panel-resources -->
+
+      <!-- ════════════════════════════
+           TAB 3: REFLECTIONS
+      ════════════════════════════ -->
+      <div class="tab-panel" id="panel-reflections">
+
+        <div class="panel-intro">
+          <span class="panel-intro-icon">&#9997;</span>
+          <div>
+            <h4>Short Reflections from the IDOGO Community</h4>
+            <p>Brief written pieces &mdash; not long essays, just honest thinking &mdash; from students, educators, researchers, and community members connected to the project.</p>
+          </div>
+        </div>
+
+        <div class="reflections-grid">
+
+          <div class="reflection-card">
+            <div class="reflection-meta">
+              <span>&#128100; Student Researcher</span>
+              <span>&middot;</span>
+              <span>&#128197; March 2024</span>
+            </div>
+            <h4>The Language I Was Taught to Be Ashamed Of</h4>
+            <p>Growing up, I learned early that the language spoken at home was not the language of success. School made that distinction clear without ever saying it outright. This reflection explores what that does to a student's sense of self over time...</p>
+            <a href="#" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Read More &rarr;</a>
+          </div>
+
+          <div class="reflection-card">
+            <div class="reflection-meta">
+              <span>&#128100; Community Educator</span>
+              <span>&middot;</span>
+              <span>&#128197; February 2024</span>
+            </div>
+            <h4>What I Wish Researchers Would Ask</h4>
+            <p>Researchers come into our community with questions. They rarely ask the ones that matter most to us. After twenty years working with students in multilingual settings, here is what I would want any researcher to understand before they begin...</p>
+            <a href="#" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Read More &rarr;</a>
+          </div>
+
+          <div class="reflection-card">
+            <div class="reflection-meta">
+              <span>&#128100; Graduate Researcher</span>
+              <span>&middot;</span>
+              <span>&#128197; January 2024</span>
+            </div>
+            <h4>On Reading Fanon in a Language He Did Not Choose</h4>
+            <p>There is something strange about reading postcolonial theory in the very colonial language it critiques. This reflection sits with that contradiction and asks what it means for how we do research and who gets to do it...</p>
+            <a href="#" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Read More &rarr;</a>
+          </div>
+
+          <div class="reflection-card">
+            <div class="reflection-meta">
+              <span>&#128100; Prof. Odugu</span>
+              <span>&middot;</span>
+              <span>&#128197; December 2023</span>
+            </div>
+            <h4>Why I Started IDOGO</h4>
+            <p>The question that launched this project was not an academic one. It came from a student in my class who asked, simply: why do I have to perform intelligence in a language that was not built for people like me? I did not have a good answer. I still do not, fully. But I am trying...</p>
+            <a href="#" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Read More &rarr;</a>
+          </div>
+
+          <div class="reflection-card">
+            <div class="reflection-meta">
+              <span>&#128100; Practitioner</span>
+              <span>&middot;</span>
+              <span>&#128197; November 2023</span>
+            </div>
+            <h4>Teaching in Two Languages at Once</h4>
+            <p>Every day in my classroom I navigate between the official language of instruction and the languages my students actually think and dream in. This is what that navigation looks like in practice, and why it matters more than most curricula acknowledge...</p>
+            <a href="#" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Read More &rarr;</a>
+          </div>
+
+          <div class="reflection-card">
+            <div class="reflection-meta">
+              <span>&#128100; Undergraduate</span>
+              <span>&middot;</span>
+              <span>&#128197; October 2023</span>
+            </div>
+            <h4>First-Generation and the Weight of Academic English</h4>
+            <p>Nobody in my family had been to university before me. When I arrived, I quickly learned that knowing the subject was not enough &mdash; I also had to learn to speak the institution. This is what that learning cost, and what it is still costing me...</p>
+            <a href="#" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Read More &rarr;</a>
+          </div>
+
+        </div>
+
+        <!-- Submit a reflection CTA -->
+        <div class="submit-reflection">
+          <h4>Have Something to Share?</h4>
+          <p>IDOGO welcomes short reflections from students, educators, practitioners, and community members. You do not need to be an academic to contribute &mdash; honest thinking is what matters.</p>
+          <a href="community.html#contact" class="btn btn-primary">Submit a Reflection</a>
+        </div>
+
+      </div>
+      <!-- end panel-reflections -->
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       CTA
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--dark">
+    <div class="container text-center">
+      <span class="section-label" style="color:var(--border);">Stay Involved</span>
+      <h2 style="color:var(--surface); margin-bottom:16px;">Want to Contribute to the Library?</h2>
+      <p style="color:var(--border); margin:0 auto 32px; font-size:1.05rem;">Submit a reflection, share a resource, or get in touch about collaborating on a video conversation. The library grows with the community.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="community.html#contact" class="btn btn-primary">Get in Touch</a>
+        <a href="themes.html" class="btn btn-outline-white">Explore the Themes</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <div>
+          <div class="footer-brand">
+            <div class="footer-logo-placeholder">Logo</div>
+            <div class="footer-brand-text">
+              <span class="footer-name">IDOGO</span>
+              <span class="footer-sub">Language &amp; Colonial Legacy</span>
+            </div>
+          </div>
+          <p class="footer-desc">A public research hub exploring how colonial and institutional languages shape education, student development, and knowledge access. Led by Professor Odugu.</p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Pages</h5>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About IDOGO</a></li>
+            <li><a href="themes.html">Research Themes</a></li>
+            <li><a href="library.html">Library</a></li>
+            <li><a href="community.html">Community</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="community.html#contact">Send a Message</a></li>
+            <li><a href="community.html">Join the Community</a></li>
+            <li><a href="library.html">Browse Resources</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 IDOGO &mdash; Language, Education, and Colonial Legacy Research Project. All rights reserved.</p>
+        <p>Led by Professor Odugu</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

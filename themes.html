@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Research Themes — IDOGO explores six core areas of inquiry into language, colonial education, institutional power, student identity, and knowledge access." />
+  <title>Research Themes — IDOGO</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Themes-page-specific styles ── */
+
+    /* Full theme cards — expanded version of the preview cards */
+    .theme-full-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .theme-full-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    .theme-card-header {
+      background-color: var(--heading);
+      padding: 28px 32px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .theme-number {
+      font-family: var(--font-serif);
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.15);
+      line-height: 1;
+      flex-shrink: 0;
+      min-width: 48px;
+    }
+
+    .theme-card-header h3 {
+      color: var(--surface);
+      font-size: 1.2rem;
+      line-height: 1.3;
+      margin-top: 6px;
+    }
+
+    .theme-card-body {
+      padding: 28px 32px 32px;
+    }
+
+    .theme-card-body p {
+      font-size: 0.97rem;
+      margin-bottom: 18px;
+      max-width: 100%;
+    }
+
+    .theme-questions {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 4px;
+    }
+
+    .theme-questions h5 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .theme-questions ul {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .theme-questions ul li {
+      font-size: 0.9rem;
+      color: var(--muted);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .theme-questions ul li::before {
+      content: '\2014';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    .theme-card-footer {
+      padding: 0 32px 28px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Theme tag pills */
+    .theme-tag {
+      display: inline-block;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* Themes intro strip */
+    .themes-intro-strip {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 56px;
+    }
+
+    .themes-intro-strip h2 {
+      margin-bottom: 12px;
+    }
+
+    .themes-intro-strip p {
+      font-size: 1rem;
+      max-width: 100%;
+    }
+
+    .themes-intro-right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .intro-stat {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+    }
+
+    .intro-stat-num {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .intro-stat p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      max-width: 100%;
+    }
+
+    /* How themes work section */
+    .how-themes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .how-item {
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+
+    .how-item-icon {
+      font-size: 1.5rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .how-item h4 {
+      font-size: 0.97rem;
+      margin-bottom: 6px;
+    }
+
+    .how-item p {
+      font-size: 0.88rem;
+      max-width: 100%;
+    }
+
+    /* Themes grid layout */
+    .themes-full-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    /* Connections section */
+    .connections-wrap {
+      background-color: var(--heading);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+    }
+
+    .connections-wrap .section-label {
+      color: var(--border);
+    }
+
+    .connections-wrap h2 {
+      color: var(--surface);
+      margin-bottom: 14px;
+    }
+
+    .connections-wrap p {
+      color: var(--border);
+      margin-bottom: 32px;
+    }
+
+    .connections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .connection-item {
+      background-color: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .connection-item h5 {
+      color: var(--surface);
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+    }
+
+    .connection-item p {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.82rem;
+      margin-bottom: 0;
+      max-width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .themes-full-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .themes-intro-strip {
+        grid-template-columns: 1fr;
+        padding: 28px 24px;
+      }
+
+      .connections-wrap {
+        padding: 32px 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .theme-card-header {
+        padding: 22px 22px 18px;
+      }
+
+      .theme-card-body {
+        padding: 22px 22px 22px;
+      }
+
+      .theme-card-footer {
+        padding: 0 22px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       FLOATING BANNER
+  ══════════════════════════════════════════════════════ -->
+  <div id="floating-banner" class="floating-banner" style="display:none;">
+    &#127775; New research conversation added &mdash;
+    <a href="library.html">Watch the latest video</a>
+    <button id="banner-close" class="banner-close" aria-label="Dismiss banner">&times;</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════════════════════════ -->
+  <nav class="site-nav" id="site-nav">
+    <div class="container">
+      <div class="nav-inner">
+
+        <a href="index.html" class="nav-logo">
+          <div class="logo-placeholder">Logo</div>
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">IDOGO</span>
+            <span class="nav-brand-sub">Language &amp; Colonial Legacy</span>
+          </div>
+        </a>
+
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="themes.html">Themes</a></li>
+          <li><a href="library.html">Library</a></li>
+          <li><a href="community.html">Community</a></li>
+        </ul>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+      </div>
+
+      <ul class="nav-mobile" id="nav-mobile">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="themes.html">Themes</a></li>
+        <li><a href="library.html">Library</a></li>
+        <li><a href="community.html">Community</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       PAGE HERO
+  ══════════════════════════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="section-label">Intellectual Framework</span>
+      <h1>Research Themes</h1>
+      <p>Six core areas of inquiry that organize the IDOGO project &mdash; each connected to the others, and all grounded in the central question of how language shapes education, power, and belonging.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       THEMES INTRO STRIP
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--alt">
+    <div class="container">
+
+      <div class="themes-intro-strip">
+
+        <div>
+          <span class="section-label">About These Themes</span>
+          <h2>How the Framework Is Organized</h2>
+          <p>The six research themes are not isolated silos. They overlap, inform each other, and together form a picture of how colonial language systems continue to shape modern education. Each theme connects to videos, papers, and reflections in the library.</p>
+        </div>
+
+        <div class="themes-intro-right">
+
+          <div class="intro-stat">
+            <span class="intro-stat-num">6</span>
+            <p>Core research themes anchoring the IDOGO project</p>
+          </div>
+
+          <div class="intro-stat">
+            <span class="intro-stat-num">1</span>
+            <p>Central question: how does language shape power in education?</p>
+          </div>
+
+          <div class="intro-stat">
+            <span class="intro-stat-num">&#8734;</span>
+            <p>Connections between themes, voices, and lived experiences</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- How themes work -->
+      <div class="how-themes-grid">
+
+        <div class="how-item">
+          <span class="how-item-icon">&#128218;</span>
+          <h4>Grounded in Research</h4>
+          <p>Each theme is connected to academic literature, historical evidence, and ongoing scholarly conversations.</p>
+        </div>
+
+        <div class="how-item">
+          <span class="how-item-icon">&#127908;</span>
+          <h4>Explored Through Video</h4>
+          <p>Conversations and talks in the library are organized by theme so you can go deeper on what interests you.</p>
+        </div>
+
+        <div class="how-item">
+          <span class="how-item-icon">&#127757;</span>
+          <h4>Informed by Community</h4>
+          <p>Community voices and lived experiences shape how these themes are understood and discussed.</p>
+        </div>
+
+        <div class="how-item">
+          <span class="how-item-icon">&#128260;</span>
+          <h4>Always Evolving</h4>
+          <p>The themes grow as the project adds new materials, voices, and perspectives over time.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SIX FULL THEME CARDS
+  ══════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-label">The Six Themes</span>
+        <h2>Core Areas of Inquiry</h2>
+        <p>Each theme is a lens for exploring a different dimension of the relationship between language, colonialism, and education.</p>
+      </div>
+
+      <div class="themes-full-grid">
+
+        <!-- Theme 1 -->
+        <div class="theme-full-card">
+          <div class="theme-card-header">
+            <span class="theme-number">01</span>
+            <h3>Colonial Language in Schooling</h3>
+          </div>
+          <div class="theme-card-body">
+            <p>Colonial powers established schools not only to teach reading and writing, but to reshape the identities and loyalties of colonized peoples. The language of instruction was a deliberate choice &mdash; one that elevated certain tongues as legitimate and cast others as inferior or irrelevant.</p>
+            <p>This theme examines how those choices were made, what they were designed to achieve, and how they continue to echo in contemporary classrooms around the world.</p>
+            <div class="theme-questions">
+              <h5>Key Questions</h5>
+              <ul>
+                <li>Why did colonial administrators choose specific languages for schooling?</li>
+                <li>What happened to students who could not or would not adopt the colonial language?</li>
+                <li>How do postcolonial nations navigate the inheritance of colonial school languages?</li>
+                <li>What does it cost a student to be educated in a language not their own?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="theme-card-footer">
+            <span class="theme-tag">Historical</span>
+            <span class="theme-tag">Policy</span>
+            <span class="theme-tag">Curriculum</span>
+            <a href="library.html" class="theme-tag" style="color:var(--accent); border-color:var(--accent);">Related videos &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Theme 2 -->
+        <div class="theme-full-card">
+          <div class="theme-card-header">
+            <span class="theme-number">02</span>
+            <h3>Institutional Language &amp; Power</h3>
+          </div>
+          <div class="theme-card-body">
+            <p>Institutions &mdash; universities, schools, government bodies &mdash; have their own language: a specialized vocabulary, set of conventions, and ways of speaking that signal membership and competence. This language is rarely neutral.</p>
+            <p>This theme explores how institutional language functions as a gatekeeper, determining who gets taken seriously, who is seen as credible, and who is excluded before they even speak.</p>
+            <div class="theme-questions">
+              <h5>Key Questions</h5>
+              <ul>
+                <li>How does academic language reproduce existing power structures?</li>
+                <li>Who decides what counts as "proper" or "professional" language in institutions?</li>
+                <li>What happens when community members engage with institutions in their own language?</li>
+                <li>Can institutions genuinely change their language culture from within?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="theme-card-footer">
+            <span class="theme-tag">Power</span>
+            <span class="theme-tag">Institutions</span>
+            <span class="theme-tag">Access</span>
+            <a href="library.html" class="theme-tag" style="color:var(--accent); border-color:var(--accent);">Related videos &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Theme 3 -->
+        <div class="theme-full-card">
+          <div class="theme-card-header">
+            <span class="theme-number">03</span>
+            <h3>Student Identity &amp; Belonging</h3>
+          </div>
+          <div class="theme-card-body">
+            <p>For many students, the experience of schooling involves a kind of translation &mdash; not just of words, but of self. When the language of the classroom does not match the language of the home, students must navigate between worlds, often at great personal cost.</p>
+            <p>This theme centers the lived experience of students, asking how language shapes their sense of who they are and whether they belong in educational spaces.</p>
+            <div class="theme-questions">
+              <h5>Key Questions</h5>
+              <ul>
+                <li>How do students experience the gap between home language and school language?</li>
+                <li>What does it mean to "succeed" in a system built around a language that is not your own?</li>
+                <li>How do students resist, adapt to, or redefine the language expectations placed on them?</li>
+                <li>What role does language play in student mental health and sense of belonging?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="theme-card-footer">
+            <span class="theme-tag">Identity</span>
+            <span class="theme-tag">Student Experience</span>
+            <span class="theme-tag">Belonging</span>
+            <a href="library.html" class="theme-tag" style="color:var(--accent); border-color:var(--accent);">Related videos &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Theme 4 -->
+        <div class="theme-full-card">
+          <div class="theme-card-header">
+            <span class="theme-number">04</span>
+            <h3>Educational Access &amp; Outcomes</h3>
+          </div>
+          <div class="theme-card-body">
+            <p>Language is one of the most powerful predictors of educational success &mdash; not because of any inherent quality of the language itself, but because of how systems are designed. When the language of assessment is also the language of power, access becomes deeply unequal.</p>
+            <p>This theme examines how language policy translates into outcomes: graduation rates, university access, career opportunities, and lifelong civic participation.</p>
+            <div class="theme-questions">
+              <h5>Key Questions</h5>
+              <ul>
+                <li>How does medium of instruction affect student performance and completion?</li>
+                <li>Which students bear the greatest burden of language-based exclusion?</li>
+                <li>What do the data tell us about language and educational inequality?</li>
+                <li>What policy changes have successfully improved language-related access?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="theme-card-footer">
+            <span class="theme-tag">Equity</span>
+            <span class="theme-tag">Outcomes</span>
+            <span class="theme-tag">Policy</span>
+            <a href="library.html" class="theme-tag" style="color:var(--accent); border-color:var(--accent);">Related videos &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Theme 5 -->
+        <div class="theme-full-card">
+          <div class="theme-card-header">
+            <span class="theme-number">05</span>
+            <h3>Community Knowledge &amp; Expertise</h3>
+          </div>
+          <div class="theme-card-body">
+            <p>Formal education systems have historically drawn a sharp line between "expert" knowledge &mdash; validated by institutions &mdash; and community knowledge, which is often dismissed as anecdotal, informal, or irrelevant. IDOGO rejects that distinction.</p>
+            <p>This theme argues that communities hold rich, sophisticated, and irreplaceable knowledge. It explores what it means to take that knowledge seriously as a form of expertise in its own right.</p>
+            <div class="theme-questions">
+              <h5>Key Questions</h5>
+              <ul>
+                <li>What kinds of knowledge do communities hold that institutions ignore?</li>
+                <li>How can research projects genuinely include community expertise without exploiting it?</li>
+                <li>What happens when non-expert knowledge contradicts expert consensus?</li>
+                <li>How do we build research frameworks that honor multiple ways of knowing?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="theme-card-footer">
+            <span class="theme-tag">Community</span>
+            <span class="theme-tag">Knowledge</span>
+            <span class="theme-tag">Expertise</span>
+            <a href="library.html" class="theme-tag" style="color:var(--accent); border-color:var(--accent);">Related videos &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Theme 6 -->
+        <div class="theme-full-card">
+          <div class="theme-card-header">
+            <span class="theme-number">06</span>
+            <h3>Language Policy &amp; Cultural Continuity</h3>
+          </div>
+          <div class="theme-card-body">
+            <p>Language policy &mdash; the official decisions made by governments, institutions, and school systems about which languages to use, teach, and recognize &mdash; is never just about language. It is about culture, identity, history, and power.</p>
+            <p>This theme looks at how language policy decisions affect the survival and transmission of cultural knowledge, heritage languages, and the communities built around them.</p>
+            <div class="theme-questions">
+              <h5>Key Questions</h5>
+              <ul>
+                <li>How have postcolonial governments handled the language policies they inherited?</li>
+                <li>What is lost when a generation grows up schooled in a language other than their heritage language?</li>
+                <li>How do communities actively preserve and transmit language outside formal institutions?</li>
+                <li>What does successful multilingual education policy look like in practice?</li>
+              </ul>
+            </div>
+          </div>
+          <div class="theme-card-footer">
+            <span class="theme-tag">Policy</span>
+            <span class="theme-tag">Culture</span>
+            <span class="theme-tag">Heritage</span>
+            <a href="library.html" class="theme-tag" style="color:var(--accent); border-color:var(--accent);">Related videos &rarr;</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       CONNECTIONS BETWEEN THEMES
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="connections-wrap">
+
+        <span class="section-label">How Themes Connect</span>
+        <h2>These Themes Are Not Separate</h2>
+        <p>Each theme illuminates a different facet of the same core question. Together, they form a framework for understanding how language operates as a system of power within education.</p>
+
+        <div class="connections-grid">
+
+          <div class="connection-item">
+            <h5>History &#8594; Present</h5>
+            <p>Colonial language choices (Theme 1) directly shape today's institutional language norms (Theme 2).</p>
+          </div>
+
+          <div class="connection-item">
+            <h5>Policy &#8594; Experience</h5>
+            <p>Language policy decisions (Theme 6) determine the access and outcomes students face (Theme 4).</p>
+          </div>
+
+          <div class="connection-item">
+            <h5>Institution &#8594; Identity</h5>
+            <p>How institutions use language (Theme 2) deeply affects how students understand themselves (Theme 3).</p>
+          </div>
+
+          <div class="connection-item">
+            <h5>Community &#8594; Scholarship</h5>
+            <p>Community knowledge (Theme 5) challenges and enriches academic research across all other themes.</p>
+          </div>
+
+          <div class="connection-item">
+            <h5>Identity &#8594; Access</h5>
+            <p>Student sense of belonging (Theme 3) is inseparable from questions of who gets to succeed (Theme 4).</p>
+          </div>
+
+          <div class="connection-item">
+            <h5>Culture &#8594; Knowledge</h5>
+            <p>Cultural continuity (Theme 6) and community expertise (Theme 5) sustain each other across generations.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       CTA
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--dark">
+    <div class="container text-center">
+      <span class="section-label" style="color:var(--border);">Go Deeper</span>
+      <h2 style="color:var(--surface); margin-bottom:16px;">Ready to Explore the Materials?</h2>
+      <p style="color:var(--border); margin:0 auto 32px; font-size:1.05rem;">The library brings together videos, research papers, and reflections organized around these six themes. Start watching, reading, and exploring.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="library.html" class="btn btn-primary">Go to the Library</a>
+        <a href="community.html" class="btn btn-outline-white">Join the Conversation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <div>
+          <div class="footer-brand">
+            <div class="footer-logo-placeholder">Logo</div>
+            <div class="footer-brand-text">
+              <span class="footer-name">IDOGO</span>
+              <span class="footer-sub">Language &amp; Colonial Legacy</span>
+            </div>
+          </div>
+          <p class="footer-desc">A public research hub exploring how colonial and institutional languages shape education, student development, and knowledge access. Led by Professor Odugu.</p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Pages</h5>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About IDOGO</a></li>
+            <li><a href="themes.html">Research Themes</a></li>
+            <li><a href="library.html">Library</a></li>
+            <li><a href="community.html">Community</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="community.html#contact">Send a Message</a></li>
+            <li><a href="community.html">Join the Community</a></li>
+            <li><a href="library.html">Browse Resources</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 IDOGO &mdash; Language, Education, and Colonial Legacy Research Project. All rights reserved.</p>
+        <p>Led by Professor Odugu</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

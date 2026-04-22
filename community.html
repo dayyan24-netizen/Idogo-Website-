@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="IDOGO Community — Join the conversation, attend events, share your voice, and get in touch with the IDOGO project team." />
+  <title>Community — IDOGO</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Community-page-specific styles ── */
+
+    /* Who can contribute section */
+    .contribute-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .contribute-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 26px 24px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .contribute-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .contribute-icon {
+      font-size: 1.8rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .contribute-card h4 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .contribute-card p {
+      font-size: 0.88rem;
+      max-width: 100%;
+    }
+
+    /* Community voices filter bar */
+    .voices-filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .filter-btn {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 16px;
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
+    }
+
+    .filter-btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .filter-btn.active {
+      background-color: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+    }
+
+    /* Events section */
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Past events */
+    .past-event-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      opacity: 0.75;
+    }
+
+    .past-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 8px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .past-event-date {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 56px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .past-event-body h4 {
+      font-size: 0.97rem;
+      margin-bottom: 4px;
+    }
+
+    .past-event-body p {
+      font-size: 0.85rem;
+      max-width: 100%;
+    }
+
+    /* Updates / news items */
+    .updates-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .update-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .update-item:last-child {
+      border-bottom: none;
+    }
+
+    .update-date {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      min-width: 80px;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .update-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+
+    .update-body h4 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .update-body p {
+      font-size: 0.9rem;
+      max-width: 100%;
+    }
+
+    /* Contact + form layout */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      margin-bottom: 14px;
+    }
+
+    .contact-info p {
+      margin-bottom: 24px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .contact-detail-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-detail-text h5 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .contact-detail-text p {
+      font-size: 0.95rem;
+      color: var(--heading);
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .contact-detail-text a {
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+
+    /* Ways to participate */
+    .participate-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .participate-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .participate-item::before {
+      content: '\2714';
+      color: var(--accent);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Form select option */
+    .form-group select option {
+      background-color: var(--bg);
+      color: var(--heading);
+    }
+
+    @media (max-width: 860px) {
+      .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .voices-filter-bar {
+        gap: 6px;
+      }
+
+      .filter-btn {
+        font-size: 0.78rem;
+        padding: 5px 12px;
+      }
+
+      .update-item {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .update-date {
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       FLOATING BANNER
+  ══════════════════════════════════════════════════════ -->
+  <div id="floating-banner" class="floating-banner" style="display:none;">
+    &#127775; New research conversation added &mdash;
+    <a href="library.html">Watch the latest video</a>
+    <button id="banner-close" class="banner-close" aria-label="Dismiss banner">&times;</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVIGATION
+  ══════════════════════════════════════════════════════ -->
+  <nav class="site-nav" id="site-nav">
+    <div class="container">
+      <div class="nav-inner">
+
+        <a href="index.html" class="nav-logo">
+          <div class="logo-placeholder">Logo</div>
+          <div class="nav-brand-text">
+            <span class="nav-brand-name">IDOGO</span>
+            <span class="nav-brand-sub">Language &amp; Colonial Legacy</span>
+          </div>
+        </a>
+
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="themes.html">Themes</a></li>
+          <li><a href="library.html">Library</a></li>
+          <li><a href="community.html">Community</a></li>
+        </ul>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+      </div>
+
+      <ul class="nav-mobile" id="nav-mobile">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="themes.html">Themes</a></li>
+        <li><a href="library.html">Library</a></li>
+        <li><a href="community.html">Community</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════
+       PAGE HERO
+  ══════════════════════════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="container">
+      <span class="section-label">Community, Events &amp; Contact</span>
+      <h1>Join the Conversation</h1>
+      <p>IDOGO is built with and for a community &mdash; students, educators, practitioners, researchers, and anyone who has ever felt the weight of language in a classroom. Your voice belongs here.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       WHO CAN CONTRIBUTE
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--alt">
+    <div class="container">
+
+      <div class="section-header text-center">
+        <span class="section-label">Open to Everyone</span>
+        <h2>Who Is This Community For?</h2>
+        <p>You do not need credentials to belong here. IDOGO is committed to a model where non-expert voices are as welcome and as valued as academic ones.</p>
+      </div>
+
+      <div class="contribute-grid">
+
+        <div class="contribute-card">
+          <span class="contribute-icon">&#127979;</span>
+          <h4>Students</h4>
+          <p>Whether you are navigating language expectations in school right now or reflecting on your own educational journey, your experience is relevant and valuable here.</p>
+        </div>
+
+        <div class="contribute-card">
+          <span class="contribute-icon">&#128101;</span>
+          <h4>Educators</h4>
+          <p>Teachers, professors, and school leaders grappling with language, inclusion, and identity in the classroom are central contributors to this project.</p>
+        </div>
+
+        <div class="contribute-card">
+          <span class="contribute-icon">&#127757;</span>
+          <h4>Community Members</h4>
+          <p>If you have lived inside a multilingual community, navigated colonial language systems, or watched a family member do so &mdash; that knowledge matters here.</p>
+        </div>
+
+        <div class="contribute-card">
+          <span class="contribute-icon">&#128203;</span>
+          <h4>Practitioners</h4>
+          <p>Policy workers, curriculum designers, social workers, and others working in and around education systems bring insights that academic research often misses.</p>
+        </div>
+
+        <div class="contribute-card">
+          <span class="contribute-icon">&#128218;</span>
+          <h4>Researchers</h4>
+          <p>Scholars working on language, colonialism, education, identity, and related fields are welcome to contribute, collaborate, and engage with the project's themes.</p>
+        </div>
+
+        <div class="contribute-card">
+          <span class="contribute-icon">&#10067;</span>
+          <h4>The Curious</h4>
+          <p>You do not need a title or a role. If you are curious about the questions IDOGO is asking, you are exactly the kind of person this project is built for.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       COMMUNITY VOICES
+  ══════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+
+      <div class="section-header-row">
+        <div>
+          <span class="section-label">Community Voices</span>
+          <h2>What People Are Saying</h2>
+          <p>Reflections and insights from students, educators, practitioners, and community members connected to the IDOGO project.</p>
+        </div>
+        <a href="#contact" class="btn btn-outline">Share Your Voice</a>
+      </div>
+
+      <!-- Filter buttons — visual only in v1, JS can be added later -->
+      <div class="voices-filter-bar">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Students</button>
+        <button class="filter-btn">Educators</button>
+        <button class="filter-btn">Practitioners</button>
+        <button class="filter-btn">Community</button>
+        <button class="filter-btn">Researchers</button>
+      </div>
+
+      <div class="cards-grid-3">
+
+        <div class="voice-card">
+          <span class="voice-quote-mark">&ldquo;</span>
+          <p>This project helped me understand why I always felt like an outsider in the classroom. It was never about my ability &mdash; it was about whose language was centered and whose was erased.</p>
+          <div class="voice-author">
+            <div class="voice-author-avatar">&#128100;</div>
+            <div>
+              <span class="voice-author-name">Student Researcher</span>
+              <span class="voice-author-role">Undergraduate, Education Studies</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="voice-card">
+          <span class="voice-quote-mark">&ldquo;</span>
+          <p>I came in as a practitioner thinking I had the answers. The conversations in this project reminded me how much I still have to learn from the communities I work with every day.</p>
+          <div class="voice-author">
+            <div class="voice-author-avatar">&#128100;</div>
+            <div>
+              <span class="voice-author-name">Community Educator</span>
+              <span class="voice-author-role">Practitioner Contributor</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="voice-card">
+          <span class="voice-quote-mark">&ldquo;</span>
+          <p>The question of language in schools is really a question about power &mdash; about who decides what counts as knowledge and who gets to speak it, and in which room.</p>
+          <div class="voice-author">
+            <div class="voice-author-avatar">&#128100;</div>
+            <div>
+              <span class="voice-author-name">Graduate Researcher</span>
+              <span class="voice-author-role">PhD Candidate, Linguistics</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="voice-card">
+          <span class="voice-quote-mark">&ldquo;</span>
+          <p>My grandmother spoke four languages. None of them were the one that mattered at school. IDOGO is the first place I have seen that taken seriously as a loss worth studying.</p>
+          <div class="voice-author">
+            <div class="voice-author-avatar">&#128100;</div>
+            <div>
+              <span class="voice-author-name">Community Member</span>
+              <span class="voice-author-role">First-Generation University Student</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="voice-card">
+          <span class="voice-quote-mark">&ldquo;</span>
+          <p>As a teacher working in a multilingual school, I spend every day navigating language gaps the curriculum pretends do not exist. This research names what I have been living for years.</p>
+          <div class="voice-author">
+            <div class="voice-author-avatar">&#128100;</div>
+            <div>
+              <span class="voice-author-name">Classroom Teacher</span>
+              <span class="voice-author-role">K-12 Educator, 14 years</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="voice-card">
+          <span class="voice-quote-mark">&ldquo;</span>
+          <p>I appreciated that the project did not treat non-experts as data points. It treated us as people with genuine insight. That is rarer in research than it should be.</p>
+          <div class="voice-author">
+            <div class="voice-author-avatar">&#128100;</div>
+            <div>
+              <span class="voice-author-name">Community Participant</span>
+              <span class="voice-author-role">Parent &amp; Local Advocate</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       EVENTS
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--alt">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-label">Events</span>
+        <h2>Conferences, Lectures &amp; Cultural Events</h2>
+        <p>Upcoming and past events connected to the IDOGO project &mdash; academic conferences, public lectures, and community gatherings.</p>
+      </div>
+
+      <!-- Upcoming events -->
+      <h3 style="font-size:1.1rem; margin-bottom:20px; color:var(--accent);">&#128197; Upcoming</h3>
+      <div class="events-list" style="margin-bottom:48px;">
+
+        <div class="event-card">
+          <div class="event-date-block">
+            <span class="event-month">May</span>
+            <span class="event-day">14</span>
+          </div>
+          <div class="event-body">
+            <h4>IDOGO Public Lecture: Language and the Postcolonial School</h4>
+            <p>Professor Odugu presents new findings from the IDOGO project at a public lecture open to all students, faculty, and community members. No registration required.</p>
+            <div class="event-location">&#128205; University Campus &mdash; Room TBA &nbsp;|&nbsp; &#128344; 4:00 PM</div>
+            <div style="margin-top:12px;">
+              <a href="#contact" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Learn More</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date-block">
+            <span class="event-month">Jun</span>
+            <span class="event-day">06</span>
+          </div>
+          <div class="event-body">
+            <h4>Community Roundtable: Language, Identity, and Belonging</h4>
+            <p>A small-group community conversation bringing together students, educators, and community members to discuss the IDOGO themes. Open to all, limited seats available.</p>
+            <div class="event-location">&#128187; Online via Zoom &nbsp;|&nbsp; &#128344; 6:30 PM</div>
+            <div style="margin-top:12px;">
+              <a href="#contact" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">Register &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date-block">
+            <span class="event-month">Aug</span>
+            <span class="event-day">22</span>
+          </div>
+          <div class="event-body">
+            <h4>IDOGO at the Annual Education Research Conference</h4>
+            <p>The IDOGO project will be presented at the Annual Education Research Conference. Full paper and presentation details available closer to the date.</p>
+            <div class="event-location">&#128205; Conference Center, Chicago IL &nbsp;|&nbsp; &#128344; Time TBA</div>
+            <div style="margin-top:12px;">
+              <a href="#contact" class="btn btn-outline" style="font-size:0.85rem; padding:8px 16px;">More Info</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Past events -->
+      <h3 style="font-size:1.1rem; margin-bottom:16px; color:var(--muted);">&#9654; Past Events</h3>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+
+        <div class="past-event-card">
+          <div class="past-event-date">Dec<br />2023</div>
+          <div class="past-event-body">
+            <span class="past-badge">Past</span>
+            <h4>Inaugural IDOGO Research Talk</h4>
+            <p>Professor Odugu introduced the IDOGO project to a campus audience, outlining the project's goals, themes, and vision for community involvement.</p>
+          </div>
+        </div>
+
+        <div class="past-event-card">
+          <div class="past-event-date">Feb<br />2024</div>
+          <div class="past-event-body">
+            <span class="past-badge">Past</span>
+            <h4>Student Research Showcase: Language and Identity</h4>
+            <p>Student contributors to the IDOGO project presented early research findings and personal reflections at a campus showcase event.</p>
+          </div>
+        </div>
+
+        <div class="past-event-card">
+          <div class="past-event-date">Apr<br />2024</div>
+          <div class="past-event-body">
+            <span class="past-badge">Past</span>
+            <h4>Community Forum: Multilingualism in Local Schools</h4>
+            <p>A community forum co-hosted with local educators exploring multilingualism, language policy, and the daily realities of teaching in linguistically diverse classrooms.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       PROJECT UPDATES
+  ══════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-label">Project Updates</span>
+        <h2>What Is Happening with IDOGO</h2>
+        <p>Recent news and milestones from the project team.</p>
+      </div>
+
+      <div class="updates-list">
+
+        <div class="update-item">
+          <span class="update-date">Mar 2026</span>
+          <div class="update-dot"></div>
+          <div class="update-body">
+            <h4>IDOGO Website Launched</h4>
+            <p>The public-facing IDOGO website is now live, bringing together videos, resources, reflections, and community voices in one place for the first time.</p>
+          </div>
+        </div>
+
+        <div class="update-item">
+          <span class="update-date">Jan 2026</span>
+          <div class="update-dot"></div>
+          <div class="update-body">
+            <h4>New Student Researchers Join the Team</h4>
+            <p>Two new student research assistants have joined the IDOGO project, bringing fresh perspectives and new energy to the themes of language, identity, and belonging.</p>
+          </div>
+        </div>
+
+        <div class="update-item">
+          <span class="update-date">Nov 2025</span>
+          <div class="update-dot"></div>
+          <div class="update-body">
+            <h4>Conference Paper Accepted</h4>
+            <p>A paper based on IDOGO research has been accepted for presentation at the Annual Education Research Conference in August 2026.</p>
+          </div>
+        </div>
+
+        <div class="update-item">
+          <span class="update-date">Aug 2025</span>
+          <div class="update-dot"></div>
+          <div class="update-body">
+            <h4>Library Expansion: New Videos Added</h4>
+            <p>The IDOGO video library has been expanded with new interviews, student discussions, and a public lecture. Visit the Library page to explore.</p>
+          </div>
+        </div>
+
+        <div class="update-item">
+          <span class="update-date">Dec 2023</span>
+          <div class="update-dot"></div>
+          <div class="update-body">
+            <h4>IDOGO Project Officially Launched</h4>
+            <p>Professor Odugu launched the IDOGO project with an inaugural research talk on campus, establishing the project's core themes and vision for public engagement.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       CONTACT & PARTICIPATE
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--alt" id="contact">
+    <div class="container">
+
+      <div class="contact-layout">
+
+        <!-- Left: contact info -->
+        <div class="contact-info">
+          <span class="section-label">Get in Touch</span>
+          <h2>Contact &amp; Participate</h2>
+          <p>Whether you want to submit a reflection, ask a question, propose a collaboration, or simply find out more about the project &mdash; we want to hear from you.</p>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#9993;</div>
+            <div class="contact-detail-text">
+              <h5>Email</h5>
+              <a href="mailto:idogo@university.edu">idogo@university.edu</a>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#127979;</div>
+            <div class="contact-detail-text">
+              <h5>Institution</h5>
+              <p>Department of Education<br />University Name</p>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">&#128205;</div>
+            <div class="contact-detail-text">
+              <h5>Location</h5>
+              <p>Campus address to be added</p>
+            </div>
+          </div>
+
+          <!-- Ways to participate -->
+          <h4 style="margin-top:28px; margin-bottom:14px; font-size:1rem;">Ways to Get Involved</h4>
+          <div class="participate-list">
+            <div class="participate-item">Submit a short reflection for the library</div>
+            <div class="participate-item">Share a resource, paper, or reading recommendation</div>
+            <div class="participate-item">Propose a community conversation or event</div>
+            <div class="participate-item">Volunteer as a community voice contributor</div>
+            <div class="participate-item">Collaborate on a research question or video</div>
+            <div class="participate-item">Ask a question &mdash; non-expert questions are especially welcome</div>
+          </div>
+        </div>
+
+        <!-- Right: contact form -->
+        <div class="contact-form-wrap">
+          <h3 style="margin-bottom:24px; font-size:1.3rem;">Send a Message</h3>
+
+          <div id="form-success" class="form-success" style="display:none;">
+            &#10003; &nbsp; Thank you for reaching out! We will be in touch soon.
+          </div>
+
+          <form id="contact-form" novalidate>
+
+            <div class="form-group">
+              <label for="field-name">Your Name</label>
+              <input type="text" id="field-name" name="name" placeholder="e.g. Ada Okonkwo" autocomplete="name" />
+            </div>
+
+            <div class="form-group">
+              <label for="field-email">Email Address</label>
+              <input type="email" id="field-email" name="email" placeholder="you@example.com" autocomplete="email" />
+            </div>
+
+            <div class="form-group">
+              <label for="field-topic">Topic or Inquiry Type</label>
+              <select id="field-topic" name="topic">
+                <option value="" disabled selected>Select a topic...</option>
+                <option value="general">General Inquiry</option>
+                <option value="reflection">Submit a Reflection</option>
+                <option value="resource">Share a Resource</option>
+                <option value="event">Event or Collaboration Proposal</option>
+                <option value="research">Research Inquiry</option>
+                <option value="media">Media or Press</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="field-message">Your Message</label>
+              <textarea id="field-message" name="message" placeholder="Tell us what is on your mind. Non-expert questions and community perspectives are especially welcome here."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; text-align:center;">Send Message &rarr;</button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       FINAL CTA
+  ══════════════════════════════════════════════════════ -->
+  <section class="section section--dark">
+    <div class="container text-center">
+      <span class="section-label" style="color:var(--border);">Keep Exploring</span>
+      <h2 style="color:var(--surface); margin-bottom:16px;">Not Sure Where to Start?</h2>
+      <p style="color:var(--border); margin:0 auto 32px; font-size:1.05rem;">Browse the library for videos and reflections, explore the research themes, or read about the people behind the project.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="library.html" class="btn btn-primary">Explore the Library</a>
+        <a href="themes.html" class="btn btn-outline-white">Read the Themes</a>
+        <a href="about.html" class="btn btn-outline-white">About IDOGO</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <div>
+          <div class="footer-brand">
+            <div class="footer-logo-placeholder">Logo</div>
+            <div class="footer-brand-text">
+              <span class="footer-name">IDOGO</span>
+              <span class="footer-sub">Language &amp; Colonial Legacy</span>
+            </div>
+          </div>
+          <p class="footer-desc">A public research hub exploring how colonial and institutional languages shape education, student development, and knowledge access. Led by Professor Odugu.</p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Pages</h5>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About IDOGO</a></li>
+            <li><a href="themes.html">Research Themes</a></li>
+            <li><a href="library.html">Library</a></li>
+            <li><a href="community.html">Community</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="#contact">Send a Message</a></li>
+            <li><a href="library.html">Browse Resources</a></li>
+            <li><a href="library.html">Watch Videos</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 IDOGO &mdash; Language, Education, and Colonial Legacy Research Project. All rights reserved.</p>
+        <p>Led by Professor Odugu</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
