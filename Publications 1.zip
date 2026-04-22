@@ -1,5 +1,0 @@
-git clone https://github.com/dayyan24-netizen/Idogo-Website-.git
-cd Idogo-Website-
-git rm "Publications 1.zip"
-git commit -m "Delete Publications 1.zip"
-git push origin main  # or your branch name
